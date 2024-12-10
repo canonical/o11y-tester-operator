@@ -38,10 +38,10 @@ extend-exclude = ["__pycache__", "*.egg_info"]
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "C", "N", "R", "D"]
-# # Ignore D107 Missing docstring in __init__
-# ignore = ["W505", "D107", "C901", "N818", "RET504"]
-# # D100, D101, D102, D103: Ignore missing docstrings in tests
-# per-file-ignores = {"tests/*" = ["D100","D101","D102","D103"]}
+# Ignore D107 Missing docstring in __init__
+ignore = ["W505", "D107", "C901", "N818", "RET504"]
+# D100, D101, D102, D103: Ignore missing docstrings in tests
+per-file-ignores = {"tests/*" = ["D100","D101","D102","D103"]}
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

@@ -18,7 +18,6 @@ links:
 assumes:
   - k8s-api
 
-
 # Your workload’s containers.
 containers:
   httpbin:
@@ -63,9 +62,9 @@ parts:
       - git
     build-snaps:
       - astral-uv
-      - just
     override-build: |
-      just requirements
+      uvx tox -e requirements
+      git describe --tags --always > version
       craftctl default
     # charm-requirements defaults to requirements.txt, but without setting it (counter-intuitive) 
     # the charm does not respect the requirements.txt when generated dynamically during build.

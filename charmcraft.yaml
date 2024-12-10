@@ -1,0 +1,50 @@
+# Copyright 2024 Canonical
+# See LICENSE file for licensing details.
+
+type: charm
+name: o11y-tester
+summary: Tester charm for Observability's CI workflows
+description: This is a charm only used to test our CI workflows.
+
+links:
+  documentation: https://github.com/o11y-tester-operator/README.md
+  website:
+    - https://charmhub.io/o11y-tester
+  source:
+    - https://github.com/canonical/o11y-tester-operator
+  issues:
+    - https://github.com/canonical/o11y-tester-operator/issues
+
+assumes:
+  - k8s-api
+
+storage:
+  database:
+    type: filesystem
+
+
+# We need to attach a resource to better mimic a normal charm in our workflows
+resources:
+  any-image:
+    type: oci-image
+    description: OCI image for Ubuntu Python (any lightweight image)
+    upstream-source: ubuntu/python:3.12-24.04
+
+base: ubuntu@24.04
+
+platforms:
+  amd64:
+
+parts:
+  charm:
+    build-packages:
+      - git
+    build-snaps:
+      - astral-uv
+      - just
+    override-build: |
+      just requirements
+      craftctl default
+    # charm-requirements defaults to requirements.txt, but without setting it (counter-intuitive) 
+    # the charm does not respect the requirements.txt when generated dynamically during build.
+    charm-requirements: [requirements.txt]

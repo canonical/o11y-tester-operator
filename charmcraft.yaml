@@ -58,12 +58,11 @@ platforms:
 
 parts:
   charm:
-    build-packages:
-      - git
-    build-snaps:
-      - astral-uv
+    build-packages: [git]
+    build-snaps: [astral-uv]
+    charm-python-packages: [tox]
     override-build: |
-      uvx tox -e requirements
+      tox -e requirements
       git describe --tags --always > version
       craftctl default
     # charm-requirements defaults to requirements.txt, but without setting it (counter-intuitive) 

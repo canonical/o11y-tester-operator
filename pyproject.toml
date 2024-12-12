@@ -19,6 +19,7 @@ dev = [
   # Unit
   "pytest",
   "coverage[toml]",
+  "ops[testing]",
   # Integration
   "juju",
   "pytest-operator",

@@ -20,7 +20,7 @@ jobs:
 
   use-matrix:
     name: Use Matrix
-    needs: [define-matrix]
+    # needs: [define-matrix]
     strategy:
       fail-fast: false
       matrix:

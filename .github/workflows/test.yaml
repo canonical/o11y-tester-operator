@@ -10,9 +10,10 @@ jobs:
     name: Define Matrix
     runs-on: ubuntu-latest
     outputs:
-      runner: ${{ steps.runners.outputs.runners }}
+      runners: ${{ steps.list-runners.outputs.runners }}
     steps:
       - name: Define the runners matrix
+        id: list-runners
         run: |
           platforms="$(echo 'ubuntu-latest\nUbuntu_ARM64_4C_16G_01' | jq -r -ncR '[inputs]')"
           echo "runners=$runners" >> $GITHUB_OUTPUT

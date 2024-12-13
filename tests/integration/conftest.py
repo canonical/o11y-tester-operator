@@ -41,7 +41,7 @@ def timed_memoizer(func):
 @timed_memoizer
 async def charm(ops_test: OpsTest) -> str:
     """Charm used for integration testing."""
-    if charm_file := os.environ.get("CHARM_NAME"):
+    if charm_file := os.environ.get("CHARM_PATH"):
         return str(charm_file)
 
     charm = await ops_test.build_charm(".")

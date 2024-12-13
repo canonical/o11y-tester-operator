@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Define the runners matrix
         run: |
-          platforms="$(echo 'ubuntu-latest\nUbuntu_ARM64_4C_16G_01' | jq -r -ncR 'inputs')"
+          platforms="$(echo 'ubuntu-latest\nUbuntu_ARM64_4C_16G_01' | jq -r -ncR '[inputs]')"
           echo "runners=$runners" >> $GITHUB_OUTPUT
 
   use-matrix:

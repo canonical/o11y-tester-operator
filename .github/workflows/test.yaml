@@ -6,17 +6,17 @@ on:
       - main
 
 jobs:
-  define-matrix:
-    name: Define Matrix
-    runs-on: ubuntu-latest
-    outputs:
-      runners: ${{ steps.list-runners.outputs.runners }}
-    steps:
-      - name: Define the runners matrix
-        id: list-runners
-        run: |
-          platforms="$(echo 'ubuntu-latest\nUbuntu_ARM64_4C_16G_01' | jq -r -ncR '[inputs]')"
-          echo "runners=$runners" >> $GITHUB_OUTPUT
+  # define-matrix:
+  #   name: Define Matrix
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     runners: ${{ steps.list-runners.outputs.runners }}
+  #   steps:
+  #     - name: Define the runners matrix
+  #       id: list-runners
+  #       run: |
+  #         platforms="$(echo 'ubuntu-latest\nUbuntu_ARM64_4C_16G_01' | jq -r -ncR '[inputs]')"
+  #         echo "runners=$runners" >> $GITHUB_OUTPUT
 
   use-matrix:
     name: Use Matrix
@@ -24,12 +24,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runner: ${{ fromJSON(needs.define-matrix.outputs.runners) }}
+        runner: [ubuntu-latest, Ubuntu_ARM64_4C_16G_01]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Print the runner type
         run: |
           echo "${{ matrix.runner }}"
           uname -a
-
-

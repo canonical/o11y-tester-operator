@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - track/0
 
 jobs:
   release:

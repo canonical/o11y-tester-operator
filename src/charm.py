@@ -6,7 +6,7 @@
 
 """Charm the service.
 
-Hello again friend!
+Hello again dear friend!
 
 Refer to the following tutorial that will help you
 develop a new k8s charm using the Operator Framework:

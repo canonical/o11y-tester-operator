@@ -6,7 +6,7 @@
 
 """Charm the service.
 
-This is a new charm revision.
+Some new unique string.
 
 Refer to the following tutorial that will help you
 develop a new k8s charm using the Operator Framework:

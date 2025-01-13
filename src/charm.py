@@ -6,12 +6,12 @@
 
 """Charm the service.
 
-Some new unique string. :D
+If you need to test the release workflow, you should know that
+charm contents needs to be unique (i.e. different from all previous
+revisions) in order to create a new revision on Charmhub.
 
-Refer to the following tutorial that will help you
-develop a new k8s charm using the Operator Framework:
-
-https://juju.is/docs/sdk/create-a-minimal-kubernetes-charm
+You can increase the following number to guarantee unique contents.
+Number: 42
 """
 
 import logging

@@ -6,9 +6,6 @@ on:
       - main
       - track/0
 
-permissions:
-  contents: write
-
 jobs:
   release:
     uses: canonical/observability/.github/workflows/charm-release.yaml@feature/v1

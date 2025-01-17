@@ -91,7 +91,9 @@ class CharmTestCharm(ops.CharmBase):
                 "agent": {
                     "override": "replace",
                     "summary": "agent",
-                    "command": "/usr/bin/grafana-agent --config.file=/etc/agent/agent.yaml --metrics.wal-directory=/etc/agent/data",
+                    "command": "/usr/bin/grafana-agent "
+                    "--config.file=/etc/agent/agent.yaml "
+                    "--metrics.wal-directory=/etc/agent/data",
                     "startup": "enabled",
                 }
             },

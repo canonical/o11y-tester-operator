@@ -21,7 +21,7 @@ assumes:
 # Your workload’s containers.
 containers:
   agent:
-    resource: grafana-agent-image
+    resource: agent-image
 
 resources:
   agent-image:

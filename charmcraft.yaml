@@ -20,7 +20,7 @@ assumes:
 
 # Your workload’s containers.
 containers:
-  pause:
+  agent:
     resource: grafana-agent-image
 
 resources:

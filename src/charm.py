@@ -30,12 +30,10 @@ class CharmTestCharm(ops.CharmBase):
 
     def __init__(self, framework: ops.Framework):
         super().__init__(framework)
-        framework.observe(
-            self.on["grafana-agent"].pebble_ready, self._on_grafana_agent_pebble_ready
-        )
+        framework.observe(self.on["agent"].pebble_ready, self._on_agent_pebble_ready)
         framework.observe(self.on.config_changed, self._on_config_changed)
 
-    def _on_grafana_agent_pebble_ready(self, event: ops.PebbleReadyEvent):
+    def _on_agent_pebble_ready(self, event: ops.PebbleReadyEvent):
         """Define and start a workload using the Pebble API.
 
         Change this example to suit your needs. You'll need to specify the right entrypoint and
@@ -46,7 +44,7 @@ class CharmTestCharm(ops.CharmBase):
         # Get a reference the container attribute on the PebbleReadyEvent
         container = event.workload
         # Add initial Pebble config layer using the Pebble API
-        container.add_layer("grafana-agent", self._pebble_layer, combine=True)
+        container.add_layer("agent", self._pebble_layer, combine=True)
         # Make Pebble reevaluate its plan, ensuring any services are started if enabled.
         container.replan()
         # Learn more about statuses in the SDK docs:
@@ -67,10 +65,10 @@ class CharmTestCharm(ops.CharmBase):
         # Do some validation of the configuration option
         if log_level in VALID_LOG_LEVELS:
             # The config is good, so update the configuration of the workload
-            container = self.unit.get_container("grafana-agent")
+            container = self.unit.get_container("agent")
             # Push an updated layer with the new config
             try:
-                container.add_layer("grafana-agent", self._pebble_layer, combine=True)
+                container.add_layer("agent", self._pebble_layer, combine=True)
                 container.replan()
             except ops.pebble.ConnectionError:
                 # We were unable to connect to the Pebble API, so we defer this event
@@ -90,7 +88,7 @@ class CharmTestCharm(ops.CharmBase):
             "summary": "grafana-agent layer",
             "description": "pebble config layer for grafana-agent",
             "services": {
-                "httpbin": {
+                "agent": {
                     "override": "replace",
                     "summary": "agent",
                     "command": "/usr/bin/grafana-agent --config.file=/etc/agent/agent.yaml --metrics.wal-directory=/etc/agent/data",

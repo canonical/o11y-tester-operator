@@ -11,7 +11,7 @@ charm contents needs to be unique (i.e. different from all previous
 revisions) in order to create a new revision on Charmhub.
 
 You can increase the following number to guarantee unique contents.
-Number: 55
+Number: 1
 """
 
 import logging
@@ -30,10 +30,12 @@ class CharmTestCharm(ops.CharmBase):
 
     def __init__(self, framework: ops.Framework):
         super().__init__(framework)
-        framework.observe(self.on["httpbin"].pebble_ready, self._on_httpbin_pebble_ready)
+        framework.observe(
+            self.on["grafana-agent"].pebble_ready, self._on_grafana_agent_pebble_ready
+        )
         framework.observe(self.on.config_changed, self._on_config_changed)
 
-    def _on_httpbin_pebble_ready(self, event: ops.PebbleReadyEvent):
+    def _on_grafana_agent_pebble_ready(self, event: ops.PebbleReadyEvent):
         """Define and start a workload using the Pebble API.
 
         Change this example to suit your needs. You'll need to specify the right entrypoint and
@@ -44,7 +46,7 @@ class CharmTestCharm(ops.CharmBase):
         # Get a reference the container attribute on the PebbleReadyEvent
         container = event.workload
         # Add initial Pebble config layer using the Pebble API
-        container.add_layer("httpbin", self._pebble_layer, combine=True)
+        container.add_layer("grafana-agent", self._pebble_layer, combine=True)
         # Make Pebble reevaluate its plan, ensuring any services are started if enabled.
         container.replan()
         # Learn more about statuses in the SDK docs:
@@ -65,10 +67,10 @@ class CharmTestCharm(ops.CharmBase):
         # Do some validation of the configuration option
         if log_level in VALID_LOG_LEVELS:
             # The config is good, so update the configuration of the workload
-            container = self.unit.get_container("httpbin")
+            container = self.unit.get_container("grafana-agent")
             # Push an updated layer with the new config
             try:
-                container.add_layer("httpbin", self._pebble_layer, combine=True)
+                container.add_layer("grafana-agent", self._pebble_layer, combine=True)
                 container.replan()
             except ops.pebble.ConnectionError:
                 # We were unable to connect to the Pebble API, so we defer this event
@@ -76,7 +78,6 @@ class CharmTestCharm(ops.CharmBase):
                 event.defer()
                 return
 
-            logger.debug("Log level for gunicorn changed to '%s'", log_level)
             self.unit.status = ops.ActiveStatus()
         else:
             # In this case, the config option is bad, so block the charm and notify the operator.
@@ -86,17 +87,14 @@ class CharmTestCharm(ops.CharmBase):
     def _pebble_layer(self) -> ops.pebble.LayerDict:
         """Return a dictionary representing a Pebble layer."""
         return {
-            "summary": "httpbin layer",
-            "description": "pebble config layer for httpbin",
+            "summary": "grafana-agent layer",
+            "description": "pebble config layer for grafana-agent",
             "services": {
                 "httpbin": {
                     "override": "replace",
-                    "summary": "httpbin",
-                    "command": "gunicorn -b 0.0.0.0:80 httpbin:app -k gevent",
+                    "summary": "agent",
+                    "command": "/usr/bin/grafana-agent --config.file=/etc/agent/agent.yaml --metrics.wal-directory=/etc/agent/data",
                     "startup": "enabled",
-                    "environment": {
-                        "GUNICORN_CMD_ARGS": f"--log-level {self.model.config['log-level']}"
-                    },
                 }
             },
         }

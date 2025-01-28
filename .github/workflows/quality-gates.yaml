@@ -1,0 +1,14 @@
+name: Quality Gates
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+  # Run the quality checks periodically
+  schedule:
+    - cron: "0 0 * * Tue"
+
+jobs:
+  quality-gates:
+    name: Run quality gates
+    uses: canonical/observability/.github/workflows/charm-quality-gates.yaml@v1
+    secrets: inherit

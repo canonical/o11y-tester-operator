@@ -2,6 +2,7 @@ name: Auto-update Charm Libraries
 on:
   # Manual trigger
   workflow_dispatch:
+  pull_request:
   # Only use manual trigger for testing
   # schedule:
   #   - cron: "0 0,4,8,12,16,20 * * *"

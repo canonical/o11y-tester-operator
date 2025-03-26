@@ -1,0 +1,10 @@
+name: Security vulnerability scan
+
+on:
+    workflow_dispatch:
+
+jobs:
+    scan:
+        name: Secscan
+        uses: canonical/observability/.github/workflows/charm-sec-scan.yaml@feat/secscan
+        secrets: inherit

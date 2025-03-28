@@ -9,3 +9,6 @@ jobs:
         name: Secscan
         uses: canonical/observability/.github/workflows/charm-sec-scan.yaml@feat/secscan-test
         secrets: inherit
+        with:
+            charm-name: o11y-tester
+            charm-channel: latest/edge

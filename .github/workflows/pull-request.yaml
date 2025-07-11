@@ -9,5 +9,5 @@ on:
 jobs:
   pull-request:
     name: PR
-    uses: canonical/o11y-tester-operator/.github/workflows/charm-pull-request.yaml@feat/jdl-upload
+    uses: canonical/o11y-tester-operator/.github/workflows/charm-pull-request.yaml@test/logs
     secrets: inherit

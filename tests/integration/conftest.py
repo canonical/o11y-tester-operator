@@ -56,5 +56,4 @@ def dump_logs():
     yield
     logs = Path(REPO_ROOT)/".logs"
     logs.mkdir()
-
     (logs/'logfile.txt').write_text("something something")

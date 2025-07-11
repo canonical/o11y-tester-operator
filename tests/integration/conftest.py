@@ -8,6 +8,7 @@ import logging
 import os
 from collections import defaultdict
 from datetime import datetime
+from pathlib import Path
 
 import pytest
 from pytest_operator.plugin import OpsTest
@@ -47,3 +48,10 @@ async def charm(ops_test: OpsTest) -> str:
     charm = await ops_test.build_charm(".")
     assert charm
     return str(charm)
+
+
+@pytest.fixture(scope="session")
+def dump_logs():
+    logs = Path("./.logs")
+    logs.mkdir()
+    (logs/'logfile.txt').write_text("something something")

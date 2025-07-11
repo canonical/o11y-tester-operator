@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 store = defaultdict(str)
 
+REPO_ROOT = Path(__file__).parent.parent.parent
 
 def timed_memoizer(func):
     """Cache the result of a function."""
@@ -52,6 +53,7 @@ async def charm(ops_test: OpsTest) -> str:
 
 @pytest.fixture(scope="session")
 def dump_logs():
-    logs = Path("./.logs")
+    yield
+    logs = Path(REPO_ROOT)/".logs"
     logs.mkdir()
     (logs/'logfile.txt').write_text("something something")

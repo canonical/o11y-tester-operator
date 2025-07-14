@@ -55,5 +55,5 @@ async def charm(ops_test: OpsTest) -> str:
 def dump_logs():
     yield
     logs = Path(REPO_ROOT)/".logs"
-    logs.mkdir()
+    logs.mkdir(exist_ok=True)
     (logs/'logfile.txt').write_text("something something")

@@ -51,7 +51,7 @@ async def charm(ops_test: OpsTest) -> str:
     return str(charm)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def dump_logs():
     yield
     logs = Path(REPO_ROOT)/".logs"

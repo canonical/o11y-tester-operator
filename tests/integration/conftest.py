@@ -53,7 +53,7 @@ async def charm(ops_test: OpsTest) -> str:
 
 @pytest.fixture(scope="session", autouse=True)
 def dump_logs():
-    yield # touchy again
+    yield # touchy again and again
     logs = Path(REPO_ROOT)/".logs"
     logs.mkdir(exist_ok=True)
     (logs/'logfile.txt').write_text("something something")

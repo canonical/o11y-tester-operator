@@ -4,8 +4,9 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "**/*.tf"
+    # TODO: uncomment
+    # paths:
+    #   - "**/*.tf"
 
 jobs:
   promote:

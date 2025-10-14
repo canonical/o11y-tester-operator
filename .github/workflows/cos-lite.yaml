@@ -10,7 +10,7 @@ on:
 jobs:
   promote:
     name: Upgrade
-    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yml@test/mt
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/mt
     with:
       product: cos-lite
       pytest: test_upgrade_1_to_2.py

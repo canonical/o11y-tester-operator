@@ -16,7 +16,7 @@ jobs:
     name: Upgrade
     uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yml@test/mt
     with:
-      product: cos_lite
+      product: cos-lite
       from: 1/stable
       to: 2/edge
     secrets: inherit

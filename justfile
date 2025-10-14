@@ -1,2 +1,5 @@
-upgrade *args='':
-  echo "We made it"
+upgrade-cos:
+  echo "Executing cos ..."
+
+upgrade-cos-lite:
+  echo "Executing cos-lite ..."

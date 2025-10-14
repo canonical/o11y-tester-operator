@@ -1,26 +1,29 @@
-name: Terraform
+name: Upgrade the Terraform product module
 
 on:
   workflow_call:
     inputs:
       product:
+        description: 'The (lowercase with dashes for spaces) name of the product module'
         required: true
         type: string
       from:
+        description: 'The track/risk to deploy from'
         required: true
         type: string
       to:
+        description: 'The track/risk to upgrade to'
         required: true
         type: string
   workflow_dispatch:
     inputs:
       product:
-        description: 'The COS product module'
+        description: 'The (lowercase with dashes for spaces) name of the product module'
         required: true
         type: choice
         options:
         - cos
-        - cos_lite
+        - cos-lite
       from:
         description: 'The track/risk to deploy from'
         required: true
@@ -59,7 +62,7 @@ on:
 
 jobs:
   terraform-upgrade:
-    name: Test upgrade Terraform product module
+    name: Upgrade the Terraform product module
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -69,6 +72,6 @@ jobs:
           sudo snap install --classic just
           # sudo snap install concierge --classic
           # sudo concierge prepare -p microk8s --extra-snaps just,astral-uv,terraform
-      - name: Test the product module
+      - name: Test deploy and upgrade
         run: |
-          just upgrade test_${{ inputs.product }}_upgrade.py
+          just upgrade-${{ inputs.product }}

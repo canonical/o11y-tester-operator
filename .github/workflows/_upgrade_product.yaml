@@ -20,7 +20,7 @@ on:
         options:
         - cos
         - cos-lite
-      pytest:
+      pytest-file:
         description: 'The cross-track upgrade pytest'
         required: true
         type: choice
@@ -37,9 +37,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          sudo snap install --classic just
-          # sudo snap install concierge --classic
-          # sudo concierge prepare -p microk8s --extra-snaps just,astral-uv,terraform
+          sudo snap install concierge --classic
+          sudo concierge prepare -p microk8s --extra-snaps just,astral-uv,terraform
       - name: Test deploy and upgrade
         run: |
-          just upgrade-${{ inputs.product }} ${{ inputs.pytest }}
+          just upgrade-${{ inputs.product }} ${{ inputs.pytest-file }}

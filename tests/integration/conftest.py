@@ -9,6 +9,7 @@ import os
 from collections import defaultdict
 from datetime import datetime
 
+import jubilant
 import pytest
 from pytest_operator.plugin import OpsTest
 
@@ -47,3 +48,10 @@ async def charm(ops_test: OpsTest) -> str:
     charm = await ops_test.build_charm(".")
     assert charm
     return str(charm)
+
+
+@pytest.fixture(scope="module")
+def juju():
+    keep_models: bool = os.environ.get("KEEP_MODELS") is not None
+    with jubilant.temp_model(keep=keep_models) as juju:
+        yield juju

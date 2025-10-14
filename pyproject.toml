@@ -23,6 +23,7 @@ dev = [
   # Integration
   "juju",
   "pytest-operator",
+  "jubilant",
 ]
 
 # Testing tools configuration

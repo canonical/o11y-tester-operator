@@ -1,15 +1,11 @@
 name: Upgrade product module
 
 on:
-  workflow_dispatch:
-    inputs:
-      promotion:
-        type: choice
-        description: Channel to promote from
-        options:
-          - edge -> beta
-          - beta -> candidate
-          - candidate -> stable
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**/*.tf"
 
 jobs:
   promote:
@@ -17,6 +13,5 @@ jobs:
     uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yml@test/mt
     with:
       product: cos-lite
-      from: 1/stable
-      to: 2/edge
+      pytest: test_upgrade_1_to_2.py
     secrets: inherit

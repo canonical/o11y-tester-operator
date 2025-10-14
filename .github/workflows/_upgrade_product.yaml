@@ -7,7 +7,7 @@ on:
         description: 'The (lowercase with dashes for spaces) name of the product module'
         required: true
         type: string
-      pytest:
+      pytest-file:
         description: 'The cross-track upgrade pytest'
         required: true
         type: string

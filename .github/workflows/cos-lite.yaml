@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+    inputs:
+      promotion:
+        type: choice
+        description: Channel to promote from
+        options:
+          - edge -> beta
+          - beta -> candidate
+          - candidate -> stable
+
+jobs:
+  promote:
+    name: Upgrade
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yml@test/mt
+    with:
+      product: cos_lite
+      from: 1/stable
+      to: 2/edge
+    secrets: inherit

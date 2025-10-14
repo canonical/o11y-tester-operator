@@ -1,0 +1,74 @@
+name: Terraform
+
+on:
+  workflow_call:
+    inputs:
+      product:
+        required: true
+        type: string
+      from:
+        required: true
+        type: string
+      to:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      product:
+        description: 'The COS product module'
+        required: true
+        type: choice
+        options:
+        - cos
+        - cos_lite
+      from:
+        description: 'The track/risk to deploy from'
+        required: true
+        type: choice
+        options:
+        - 1/edge
+        - 1/beta
+        - 1/candidate
+        - 1/stable
+        - 2/edge
+        - 2/beta
+        - 2/candidate
+        - 2/stable
+        - 3/edge
+        - 3/beta
+        - 3/candidate
+        - 3/stable
+      to:
+        description: 'The track/risk to upgrade to'
+        required: true
+        type: choice
+        options:
+        - 1/edge
+        - 1/beta
+        - 1/candidate
+        - 1/stable
+        - 2/edge
+        - 2/beta
+        - 2/candidate
+        - 2/stable
+        - 3/edge
+        - 3/beta
+        - 3/candidate
+        - 3/stable
+
+
+jobs:
+  terraform-upgrade:
+    name: Test upgrade Terraform product module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo snap install --classic just
+          # sudo snap install concierge --classic
+          # sudo concierge prepare -p microk8s --extra-snaps just,astral-uv,terraform
+      - name: Test the product module
+        run: |
+          just upgrade test_${{ inputs.product }}_upgrade.py

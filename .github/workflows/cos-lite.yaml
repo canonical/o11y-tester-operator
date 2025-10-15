@@ -10,8 +10,35 @@ on:
 jobs:
   upgrade:
     name: Upgrade
-    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/mt
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/tls
     with:
       product: cos-lite
       pytest-file: test_upgrade_1_to_2.py
+    secrets: inherit
+  unencrypted:
+    name: Unencrypted deployment
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/tls
+    with:
+      product: cos-lite
+      pytest-file: test_unencrypted.py
+    secrets: inherit
+  internal-tls:
+    name: Internal TLS deployment
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/tls
+    with:
+      product: cos-lite
+      pytest-file: test_internal_tls.py
+    secrets: inherit
+  external-tls:
+    name: External TLS deployment
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/tls
+    with:
+      product: cos-lite
+      pytest-file: test_external_tls.py
+  full-encryption:
+    name: Fully encrypted deployment
+    uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/tls
+    with:
+      product: cos-lite
+      pytest-file: test_full_tls_encryption.py
     secrets: inherit

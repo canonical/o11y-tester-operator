@@ -6,7 +6,7 @@ from helpers import terraform_init, terraform_deploy, terraform_destroy, terrafo
 @pytest.mark.abort_on_fail
 def test_deploy(tmpdir, juju: jubilant.Juju):
     terraform_init(tmpdir)
-    print("This is running custom track 1 code")
+    print("This is running custom track 2 code")
 
 
 # @pytest.mark.abort_on_fail

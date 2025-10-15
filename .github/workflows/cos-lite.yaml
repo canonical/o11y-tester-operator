@@ -4,12 +4,11 @@ on:
   pull_request:
     branches:
       - main
-    # TODO: uncomment
-    # paths:
-    #   - "**/*.tf"
+    paths:
+      - "**/*.tf"
 
 jobs:
-  promote:
+  upgrade:
     name: Upgrade
     uses: canonical/o11y-tester-operator/.github/workflows/_upgrade_product.yaml@test/mt
     with:

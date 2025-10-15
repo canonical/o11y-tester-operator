@@ -1,4 +1,4 @@
-name: Test product module
+name: Test COS Lite
 
 on:
   pull_request:

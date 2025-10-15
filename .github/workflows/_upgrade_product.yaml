@@ -1,4 +1,4 @@
-name: Upgrade the Terraform product module
+name: Test the Terraform product module
 
 on:
   workflow_call:
@@ -29,8 +29,8 @@ on:
 
 
 jobs:
-  terraform-upgrade:
-    name: Upgrade the Terraform product module
+  terraform-test:
+    name: Test the Terraform product module
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,6 +39,6 @@ jobs:
         run: |
           sudo snap install concierge --classic
           sudo concierge prepare -p microk8s --extra-snaps just,astral-uv,terraform
-      - name: Test deploy and upgrade
+      - name: Test deployment
         run: |
           just test-${{ inputs.product }} ${{ inputs.pytest-file }}

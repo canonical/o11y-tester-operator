@@ -11,6 +11,7 @@ from datetime import datetime
 
 import jubilant
 import pytest
+from helpers import TfDirManager
 from pytest_operator.plugin import OpsTest
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,19 @@ async def charm(ops_test: OpsTest) -> str:
 
 
 @pytest.fixture(scope="module")
-def juju():
+def ca_model():
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
     with jubilant.temp_model(keep=keep_models) as juju:
         yield juju
+
+
+@pytest.fixture(scope="module")
+def cos_model():
+    keep_models: bool = os.environ.get("KEEP_MODELS") is not None
+    with jubilant.temp_model(keep=keep_models) as juju:
+        yield juju
+
+
+@pytest.fixture
+def tf_manager(tmpdir):
+    return TfDirManager(tmpdir)

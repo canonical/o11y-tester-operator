@@ -65,6 +65,7 @@ def cos_model():
         yield juju
 
 
-@pytest.fixture
-def tf_manager(tmpdir):
-    return TfDirManager(tmpdir)
+@pytest.fixture(scope="module")
+def tf_manager(tmp_path_factory):
+    base = tmp_path_factory.mktemp("terraform_base")
+    return TfDirManager(base)

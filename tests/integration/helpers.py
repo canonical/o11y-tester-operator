@@ -32,28 +32,21 @@ class TfDirManager:
 
         self.dirs[tf_file] = tf_dir
 
-    def apply(self, tf_file: str, juju: jubilant.Juju, **kwargs):
+    @staticmethod
+    def _args_str(juju: jubilant.Juju, **kwargs):
         kwargs = {"model": juju.model, **kwargs}
         var_str = " ".join(f"-var {k}={v}" for k, v in kwargs.items())
-        cmd_str = "terraform apply -auto-approve " + var_str
+        return "-auto-approve " + var_str
 
+    def apply(self, tf_file: str, juju: jubilant.Juju, **kwargs):
+        cmd_str = "terraform apply " + self._args_str(juju, **kwargs)
         with chdir(str(self.dirs[tf_file])):
             subprocess.run(shlex.split(cmd_str), check=True)
 
         print("\nwaiting for the model to settle ...\n")
         juju.wait(jubilant.all_agents_idle, delay=5, timeout=60 * 10)
 
-    def get(self, name: str):
-        return self.dirs[name]
-
-
-
-
-
-def terraform_destroy(juju: jubilant.Juju, tf_dir: str, **kwargs):
-    kwargs = {"model": juju.model, **kwargs}
-    var_chunk = " ".join(f"-var {k}={v}" for k, v in kwargs.items())
-    cmd_str = "terraform apply -auto-approve " + " " + var_chunk
-
-    with chdir(str(tf_dir)):
-        subprocess.run(shlex.split(cmd_str), check=True)
+    def destroy(self, tf_file: str, juju: jubilant.Juju, **kwargs):
+        cmd_str = "terraform destroy " + self._args_str(juju, **kwargs)
+        with chdir(str(self.dirs[tf_file])):
+            subprocess.run(shlex.split(cmd_str), check=True)

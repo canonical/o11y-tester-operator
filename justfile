@@ -1,12 +1,10 @@
 set export  # Just variables are exported to environment variable
 uv_flags := "--frozen --isolated --extra=dev"
 
-[working-directory("./tests/integration/cos")]
+[working-directory("./tests/terraform/cos")]
 test-cos *args='':
   echo "Executing cos ... ${args}"
 
-[working-directory("./tests/integration/cos-lite")]
+[working-directory("./tests/terraform/cos-lite")]
 test-cos-lite *args='':
-  echo "Executing cos-lite ... ${args}"
-  pwd
   uv run $uv_flags pytest -vvs "${args}"

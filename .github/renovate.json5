@@ -3,6 +3,8 @@
   "extends": [
     "config:recommended",
     ":disableRateLimiting",
+    ":automergeMinor",
+    ":automergePr",
   ],
   "schedule": ["* 1-5 * * 2"],  // Tuesday 01:00-05:00 UTC
   "lockFileMaintenance": {
@@ -13,17 +15,9 @@
   "timezone": "Etc/UTC",
   "labels": [],
   "enabledManagers": ["github-actions", "custom.regex"],
-  "packageRules": [
-    {
-      "matchManagers": ["custom.regex"],
-      "matchUpdateTypes": ["minor"],
-      "automerge": true,
-      "automergeType": "pr",
-    },
-  ],
+  "packageRules": [],
   "customManagers": [
-    // Update rock images
-    //
+    // Update OCI images in charmcraft.yaml
     {
       "customType": "regex",
       "managerFilePatterns": ["/(^|/)charmcraft\\.yaml$/"],

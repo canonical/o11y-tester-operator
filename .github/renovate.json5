@@ -16,10 +16,10 @@
   "packageRules": [
     {
       "matchManagers": ["custom.regex"],
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": ["minor"],
       "automerge": true,
       "automergeType": "pr",
-    }
+    },
   ],
   "customManagers": [
     // Update rock images

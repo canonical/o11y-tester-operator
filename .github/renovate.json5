@@ -3,17 +3,24 @@
   "extends": [
     "config:recommended",
     ":disableRateLimiting",
-    ":noUnscheduledUpdates",
   ],
   "schedule": ["* 1-5 * * 2"],  // Tuesday 01:00-05:00 UTC
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["* 1-5 * * 2"]  // Tuesday 01:00-05:00 UTC
+    "schedule": ["* 1-5 * * 2"],  // Tuesday 01:00-05:00 UTC
+    "automerge": true,
   },
   "timezone": "Etc/UTC",
   "labels": [],
   "enabledManagers": ["github-actions", "custom.regex"],
-  "packageRules": [],
+  "packageRules": [
+    {
+      "matchManagers": ["custom.regex"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+    }
+  ],
   "customManagers": [
     // Update rock images
     //

@@ -17,6 +17,7 @@
   "labels": [],
   "enabledManagers": ["github-actions", "custom.regex"],
   "packageRules": [],
+  "commitMessageAction": "chore: Update",
   "customManagers": [
     // Update OCI images in charmcraft.yaml
     {

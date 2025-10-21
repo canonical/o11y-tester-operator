@@ -27,7 +27,7 @@ resources:
   agent-image:
     type: oci-image
     description: OCI image for grafana-agent
-    upstream-source: ubuntu/grafana-agent@sha256:bd273882b4d030d6f37d0c573fa15572fad83cced4df09887b9f780b59200dc0  # renovate: oci-image tag: 0.40-22.04
+    upstream-source: ubuntu/grafana-agent@sha256:a6e0cd979ea712bde6ca8171426136dd9ca19298a226c118ac10aba5ed8b6fef  # renovate: oci-image tag: 0.43.4-22.04
 
 config:
   options:

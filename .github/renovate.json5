@@ -15,6 +15,7 @@
   "labels": [],
   "enabledManagers": ["pep621", "custom.regex"],
   "packageRules": [
+    // Enable automerge for minor and patch docker updates
     {
       "matchManagers": ["custom:regex"],
       "matchDatasources": ["docker"],
@@ -26,9 +27,18 @@
       "matchUpdateTypes": ["major"],
       "automerge": false
     },
+    // Group all Python lockfile updates in one PR
     {
       "matchManagers": ["pep621"],
+      "rangeStrategy": "bump",
       "groupName": "Python dependencies",
+    },
+    // Prevent Renovate from bumping the Python version
+    {
+      "matchManagers": ["pep621"],
+      "matchDepTypes": ["dependencies"],
+      "matchDepNames": ["python"],
+      "enabled": false,
     }
   ],
   "customManagers": [

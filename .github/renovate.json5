@@ -14,7 +14,7 @@
   },
   "timezone": "Etc/UTC",
   "labels": [],
-  "enabledManagers": ["github-actions", "custom.regex"],
+  "enabledManagers": ["custom.regex"],
   "packageRules": [
     {
       "matchManagers": ["custom:regex"],

@@ -13,12 +13,22 @@
   },
   "timezone": "Etc/UTC",
   "labels": [],
-  "enabledManagers": ["custom.regex"],
+  "enabledManagers": ["pep621", "custom.regex"],
   "packageRules": [
     {
       "matchManagers": ["custom:regex"],
       "matchDatasources": ["docker"],
       "automerge": true
+    },
+    {
+      "matchManagers": ["custom:regex"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "matchManagers": ["pep621"],
+      "groupName": "Python dependencies",
     }
   ],
   "customManagers": [

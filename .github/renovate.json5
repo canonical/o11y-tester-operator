@@ -7,13 +7,9 @@
     ":automergePr",
   ],
   "schedule": ["* 8-11 * * 1"],  // Monday 08:00-11:00 UTC
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true,
-  },
   "timezone": "Etc/UTC",
   "labels": [],
-  "enabledManagers": ["pep621", "custom.regex"],
+  "enabledManagers": ["custom.regex"],
   "packageRules": [
     // Enable automerge for minor and patch docker updates
     {
@@ -27,18 +23,6 @@
       "matchUpdateTypes": ["major"],
       "automerge": false
     },
-    // Group all Python lockfile updates in one PR
-    {
-      "matchManagers": ["pep621"],
-      "rangeStrategy": "bump",
-      "groupName": "Python dependencies",
-    },
-    // Prevent Renovate from bumping the Python version
-    {
-      "matchManagers": ["pep621"],
-      "matchDepNames": ["python"],
-      "enabled": false,
-    }
   ],
   "customManagers": [
     // Update OCI images in charmcraft.yaml

@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>canonical/observability//.github/renovate/charm.json5",
+    "github>canonical/observability//.github/renovate/charms.json5",
   ],
 }

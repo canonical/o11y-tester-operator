@@ -8,6 +8,7 @@ import logging
 import os
 from collections import defaultdict
 from datetime import datetime
+from pathlib import Path
 
 import pytest
 from pytest_operator.plugin import OpsTest
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 store = defaultdict(str)
 
+REPO_ROOT = Path(__file__).parent.parent.parent
 
 def timed_memoizer(func):
     """Cache the result of a function."""
@@ -47,3 +49,11 @@ async def charm(ops_test: OpsTest) -> str:
     charm = await ops_test.build_charm(".")
     assert charm
     return str(charm)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def dump_logs():
+    yield # touchy again and again
+    logs = Path(REPO_ROOT)/".logs"
+    logs.mkdir(exist_ok=True)
+    (logs/'logfile.txt').write_text("something something")

@@ -8,7 +8,7 @@ on:
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@feature/v1
+    uses: canonical/observability/.github/workflows/charm-release.yaml@ci/use-charmcraft-remote-build-in-release
     secrets: inherit
     with:
       default-track: dev

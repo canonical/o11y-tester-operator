@@ -504,7 +504,7 @@ dependencies = [
     { name = "ops" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "codespell" },
     { name = "coverage", extra = ["toml"] },
@@ -517,18 +517,19 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "codespell", marker = "extra == 'dev'" },
-    { name = "coverage", extras = ["toml"], marker = "extra == 'dev'" },
-    { name = "juju", marker = "extra == 'dev'" },
-    { name = "ops" },
-    { name = "ops", extras = ["testing"], marker = "extra == 'dev'" },
-    { name = "pyright", marker = "extra == 'dev'" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "pytest-operator", marker = "extra == 'dev'" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "<0.8" },
+requires-dist = [{ name = "ops" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "codespell" },
+    { name = "coverage", extras = ["toml"] },
+    { name = "juju" },
+    { name = "ops", extras = ["testing"] },
+    { name = "pyright" },
+    { name = "pytest" },
+    { name = "pytest-operator" },
+    { name = "ruff" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "oauthlib"

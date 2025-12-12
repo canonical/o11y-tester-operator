@@ -25,7 +25,7 @@ def test_multiply_two_numbers():
     pass
 
 
-@given("I have a calculator")
+@given("I have a calculator", target_fixture="calculator")
 def calculator():
     """Create a calculator instance."""
     return SillyCalculator()

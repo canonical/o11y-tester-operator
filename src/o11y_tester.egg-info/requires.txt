@@ -1,0 +1,11 @@
+ops
+
+[dev]
+ruff
+codespell
+pyright
+pytest
+coverage[toml]
+ops[testing]
+juju
+pytest-operator

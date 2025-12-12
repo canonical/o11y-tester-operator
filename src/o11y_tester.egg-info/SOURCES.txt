@@ -1,9 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-src/charm.py
-src/o11y_tester.egg-info/PKG-INFO
-src/o11y_tester.egg-info/SOURCES.txt
-src/o11y_tester.egg-info/dependency_links.txt
-src/o11y_tester.egg-info/requires.txt
-src/o11y_tester.egg-info/top_level.txt

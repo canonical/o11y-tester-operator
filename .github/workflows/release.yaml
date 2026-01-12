@@ -1,10 +1,17 @@
 name: Release
 
+#on:
+  #push:
+    #branches:
+      #- main
+      #- track/0
+
+# TODO: remove below and uncomment the block above
 on:
-  push:
+  pull_request:
     branches:
-      - main
-      - track/0
+      - test-release
+
 
 jobs:
   release:

@@ -27,7 +27,7 @@ resources:
   agent-image:
     type: oci-image
     description: OCI image for grafana-agent
-    upstream-source: ubuntu/grafana-agent@sha256:dfe7f2b9e8ea90beb6470732e9e8f8c2792e4f6b026e1e4318ebd20cdfca6ca5  # SP: using https://hub.docker.com/layers/ubuntu/grafana-agent/0.44-24.04_stable/images/sha256-ef88583f4c821c15e743fd62cfe799164c2024f974248c6427df32a7cbd3c3af to test release for the 4 platforms. No need to revert.
+    upstream-source: ubuntu/grafana-agent@sha256:dfe7f2b9e8ea90beb6470732e9e8f8c2792e4f6b026e1e4318ebd20cdfca6ca5  # SP: using https://hub.docker.com/layers/ubuntu/grafana-agent/0.44-24.04_stable/images/sha256-ef88583f4c821c15e743fd62cfe799164c2024f974248c6427df32a7cbd3c3af to test release for the 4 platforms.
 
 config:
   options:

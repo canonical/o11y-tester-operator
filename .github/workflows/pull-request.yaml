@@ -1,12 +1,12 @@
 name: Pull Requests
 
 
-# TODO: uncomment the block once release CI passes.
-#on:
-  #pull_request:
-    #branches:
+on:
+  pull_request:
+    branches:
+      # TODO: uncomment the main branch once release CI passes.
       #- main
-      #- track/0
+      - track/0
 
 jobs:
   pull-request:

@@ -8,5 +8,5 @@ on:
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@copilot/use-charmcraft-remote-build
+    uses: canonical/observability/.github/workflows/charm-release.yaml@ci/use-charmcraft-remote-build-in-release
     secrets: inherit

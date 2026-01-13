@@ -11,5 +11,3 @@ jobs:
     # TODO: revert this to main when #30 goes through.
     uses: canonical/observability/.github/workflows/charm-release.yaml@copilot/use-charmcraft-remote-build
     secrets: inherit
-    with:
-      default-track: dev

@@ -39,15 +39,11 @@ config:
       default: "info"
       type: string
 
+base: ubuntu@24.04
+
 platforms:
-  ubuntu@22.04:amd64:
-  ubuntu@22.04:arm64:
-  ubuntu@22.04:ppc64el:
-  ubuntu@22.04:s390x:
-  ubuntu@24.04:amd64:
-  ubuntu@24.04:arm64:
-  ubuntu@24.04:ppc64el:
-  ubuntu@24.04:s390x:
+  amd64:
+  arm64:
 
 parts:
   charm:

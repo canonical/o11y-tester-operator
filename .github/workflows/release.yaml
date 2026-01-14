@@ -17,7 +17,8 @@ jobs:
   release:
     # TODO: revert this to main when #30 goes through.
     uses: canonical/observability/.github/workflows/charm-release.yaml@ci/release-remote-build
-    secrets: inherit
+    secrets:
+      LAUNCHPAD_TOKEN: ${{ secrets.GH_TOKEN }}
     with:
       default-track: dev
       pack-using-remote-build: true

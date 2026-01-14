@@ -9,7 +9,7 @@ dependencies = [
     "ops",
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
   # Linting
   "ruff",

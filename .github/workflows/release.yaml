@@ -11,4 +11,6 @@ jobs:
     uses: canonical/observability/.github/workflows/charm-release.yaml@ci/release-remote-build
     secrets:
       LAUNCHPAD_TOKEN: ${{ secrets.GH_TOKEN }}
-    pack-using-remote-build: true
+    with:
+      default-track: dev
+      pack-using-remote-build: true

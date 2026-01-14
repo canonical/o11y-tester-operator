@@ -1,9 +1,11 @@
 name: Pull Requests
 
+
 on:
   pull_request:
     branches:
-      - main
+      # TODO: uncomment the main branch once release CI passes.
+      #- main
       - track/0
 
 jobs:

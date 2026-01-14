@@ -1,12 +1,12 @@
 name: Release
 
 on:
-  push:
+  pull-request:
     branches:
       - main
       - track/0
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@feature/v1
+    uses: canonical/observability/.github/workflows/charm-release.yaml@ci/release-remote-build
     secrets: inherit

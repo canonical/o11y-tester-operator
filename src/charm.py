@@ -19,7 +19,7 @@ from typing import cast
 
 import ops
 
-# Log messages can be retrieved using juju debug-log
+# Log messages can be retrieved using juju debug-log. testing
 logger = logging.getLogger(__name__)
 
 VALID_LOG_LEVELS = ["info", "debug", "warning", "error", "critical"]

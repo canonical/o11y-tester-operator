@@ -1,12 +1,17 @@
 name: Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - track/0
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@feature/v1
-    secrets: inherit
+    uses: canonical/observability/.github/workflows/charm-release.yaml@ci/release-remote-build
+    secrets:
+      LAUNCHPAD_TOKEN: ${{ secrets.LAUNCHPAD_TOKEN }}
+      CHARMHUB_TOKEN: ${{ secrets.CHARMHUB_TOKEN }}
+    with:
+      default-track: dev
+      pack-using-remote-build: true

@@ -10,6 +10,14 @@ on:
           - edge -> beta
           - beta -> candidate
           - candidate -> stable
+      track:
+        type: choice
+        description: Track to promote
+        options:
+          # We'll leave dev out since it only has the edge risk channel.
+          - latest
+          - 1
+          - 2
 
 jobs:
   promote:

@@ -11,7 +11,7 @@ charm contents needs to be unique (i.e. different from all previous
 revisions) in order to create a new revision on Charmhub.
 
 You can increase the following number to guarantee unique contents.
-Number: 4
+Number: 5
 """
 
 import logging

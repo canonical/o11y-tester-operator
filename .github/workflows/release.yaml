@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-      - track/0
+      - track/3.0
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@feature/v1
+    uses: canonical/observability/.github/workflows/charm-release.yaml@feat/tf-tagging
     secrets: inherit

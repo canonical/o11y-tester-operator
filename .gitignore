@@ -8,6 +8,7 @@ __pycache__
 venv
 cos-tool*
 sqlite-static
+*.egg-info
 
 # Charm-specific
 requirements*.txt

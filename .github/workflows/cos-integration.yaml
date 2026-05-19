@@ -1,0 +1,119 @@
+name: COS Integration Test
+# Validates that:
+#   1. The reusable deploy-cos workflow from observability-stack can successfully deploy COS
+#      in monolithic topology with seaweedfs as the storage backend.
+#   2. The o11y-tester charm can be deployed into the same Juju model as a running COS
+#      deployment and reaches active status.
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  # ── Job 1 ─────────────────────────────────────────────────────────────────
+  # Calls the reusable deploy-cos workflow directly to verify it works end-to-end.
+  deploy-cos:
+    name: Validate deploy-cos reusable workflow
+    uses: canonical/observability-stack/.github/workflows/deploy-cos.yml@feat/reusable-deploy-cos
+    with:
+      scale: monolithic
+      storage: seaweedfs
+
+  # ── Job 2 ─────────────────────────────────────────────────────────────────
+  # Full integration test: deploys COS (using the same Terraform module as the
+  # reusable workflow) and the tester charm into the same Juju model, then asserts
+  # both reach active status.
+  tester-alongside-cos:
+    name: Deploy o11y-tester alongside COS
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout o11y-tester-operator
+        uses: actions/checkout@v4
+
+      # ── Infrastructure setup (github-hosted) ──────────────────────────────
+      - name: Set up environment (github-hosted)
+        if: ${{ runner.environment == 'github-hosted' }}
+        run: |
+          sudo snap install concierge --classic
+          sudo concierge prepare \
+            --juju-channel 3.6/stable \
+            -p microk8s \
+            --extra-snaps terraform,astral-uv,charmcraft
+
+      # ── Infrastructure setup (self-hosted / IS runner) ────────────────────
+      - name: Install snaps (self-hosted)
+        if: ${{ runner.environment == 'self-hosted' }}
+        run: |
+          sudo snap install juju --classic --channel=3.6/stable
+          sudo snap install terraform --classic
+          sudo snap install astral-uv --classic
+          sudo snap install charmcraft --classic
+
+      - name: Set up microk8s (self-hosted)
+        timeout-minutes: 15
+        if: ${{ runner.environment == 'self-hosted' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install retry -y
+          sudo snap install microk8s --channel "1.34-strict/stable" --classic
+          sudo adduser "$USER" snap_microk8s
+
+          until sudo iptables --list | grep -q -i "microk8s"
+          do
+            echo "MicroK8s has not yet configured iptables."
+            sleep 10
+          done
+
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s status --wait-ready
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- retry --times 3 --delay 5 -- sudo microk8s enable dns
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s status --wait-ready
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s.kubectl rollout status --namespace kube-system --watch --timeout=5m deployments/coredns
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- retry --times 3 --delay 5 -- sudo microk8s enable hostpath-storage
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s.kubectl rollout status --namespace kube-system --watch --timeout=5m deployments/hostpath-provisioner
+
+          IPADDR=$(ip -4 -j route get 2.2.2.2 | sed -n -e 's/^.*prefsrc\":"\([^ "]*\).*/\1/p')
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- retry --times 3 --delay 5 -- sudo microk8s enable "metallb:$IPADDR-$IPADDR"
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s status --wait-ready
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- retry --times 3 --delay 5 -- sudo microk8s enable rbac
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s status --wait-ready
+
+          mkdir ~/.kube/
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- microk8s config | sudo tee ~/.kube/config > /dev/null
+
+      - name: Bootstrap Juju (self-hosted)
+        timeout-minutes: 15
+        if: ${{ runner.environment == 'self-hosted' }}
+        run: |
+          mkdir -p ~/.local/share/juju
+          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- juju bootstrap microk8s --config model-logs-size=10G microk8s
+          juju model-defaults logging-config='<root>=INFO; unit=DEBUG'
+
+      # ── Checkout the observability-stack branch under test ─────────────────
+      - name: Checkout observability-stack (feat/reusable-deploy-cos)
+        uses: actions/checkout@v4
+        with:
+          repository: canonical/observability-stack
+          ref: feat/reusable-deploy-cos
+          path: observability-stack
+
+      # ── Build the tester charm ─────────────────────────────────────────────
+      - name: Set up LXD
+        if: ${{ runner.environment == 'github-hosted' }}
+        uses: canonical/setup-lxd@main
+
+      - name: Build tester charm
+        run: charmcraft pack --verbosity brief
+
+      # ── Run the integration test ───────────────────────────────────────────
+      # The cos-integration tox environment runs only test_deploy_with_cos.py.
+      # The cos_deployed fixture inside that test deploys COS via Terraform into
+      # the pytest-operator model, waits for all COS apps to become active, then
+      # yields so the test can deploy the tester charm alongside COS.
+      - name: Run COS integration test
+        env:
+          OBS_STACK_PATH: observability-stack
+        run: |
+          CHARM_FILE=$(find . -maxdepth 1 -name "o11y-tester_*.charm" | head -1)
+          CHARM_PATH="${CHARM_FILE}" uv run tox -e cos-integration

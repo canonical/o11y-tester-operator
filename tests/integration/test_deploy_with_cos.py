@@ -1,9 +1,16 @@
 """Integration test: deploy o11y-tester alongside a running COS deployment."""
 
+import os
 from typing import Dict
 
+import pytest
 import yaml
 from pytest_operator.plugin import OpsTest
+
+pytestmark = pytest.mark.skipif(
+    "OBS_STACK_PATH" not in os.environ,
+    reason="OBS_STACK_PATH not set; skipping COS integration test (run via tox -e cos-integration)",
+)
 
 
 def _charm_resources(metadata_file: str = "charmcraft.yaml") -> Dict[str, str]:

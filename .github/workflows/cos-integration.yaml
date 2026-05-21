@@ -17,12 +17,12 @@ on:
       runner:
         description: "Runner label (use a self-hosted label for a fully isolated environment)"
         required: false
-        default: ubuntu-latest
+        default: self-hosted-linux-amd64-noble-large
 
 jobs:
   cos-integration:
     name: Deploy COS and test o11y-tester
-    runs-on: ${{ inputs.runner || 'ubuntu-latest' }}
+    runs-on: ${{ inputs.runner || 'self-hosted-linux-amd64-noble-large' }}
     timeout-minutes: 90
 
     steps:
@@ -35,7 +35,7 @@ jobs:
       # and waits for all applications to reach active status.
       - name: Deploy COS
         id: deploy-cos
-        uses: canonical/observability-stack/.github/actions/deploy-cos@feat/deploy-cos-composite-action
+        uses: canonical/observability-stack/.github/actions/deploy-cos@feat/reusable-deploy-cos
         with:
           scale: monolithic
           storage: seaweedfs

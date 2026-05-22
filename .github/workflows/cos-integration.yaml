@@ -1,0 +1,56 @@
+name: COS Integration Test - Ceph
+# Validates that the deploy-cos composite action can deploy COS in monolithic topology
+# with Ceph (via MicroCeph + RGW) as the S3 storage backend, and that o11y-tester
+# reaches active status in that model.
+
+on:
+  pull_request:
+    branches:
+      - main
+      - track/0
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner label (use a self-hosted label for a fully isolated environment)"
+        required: false
+        default: self-hosted-linux-amd64-noble-large
+
+jobs:
+  cos-integration:
+    name: Deploy COS and test o11y-tester (monolithic + ceph)
+    runs-on: ${{ inputs.runner || 'self-hosted-linux-amd64-noble-large' }}
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout o11y-tester-operator
+        uses: actions/checkout@v4
+
+      - name: Deploy COS
+        id: deploy-cos
+        uses: canonical/observability-stack/.github/actions/deploy-cos@feat/reusable-deploy-cos
+        with:
+          scale: monolithic
+          storage: ceph
+
+      - name: Install charm tooling
+        run: |
+          sudo snap install astral-uv --classic
+          sudo snap install charmcraft --classic
+
+      - name: Build tester charm
+        run: charmcraft pack --verbosity brief
+
+      - name: Deploy o11y-tester
+        run: |
+          CHARM_FILE=$(find . -maxdepth 1 -name "o11y-tester_*.charm" | head -1)
+          AGENT_IMAGE=$(python3 -c "import yaml; d=yaml.safe_load(open('charmcraft.yaml')); print(d['resources']['agent-image']['upstream-source'])")
+          juju deploy "${CHARM_FILE}" o11y-tester \
+            --model "${{ steps.deploy-cos.outputs.cos-model }}" \
+            --resource "agent-image=${AGENT_IMAGE}"
+
+      - name: Wait for o11y-tester to become active
+        run: |
+          juju wait-for application o11y-tester \
+            --model "${{ steps.deploy-cos.outputs.cos-model }}" \
+            --timeout 15m \
+            --query 'status == "active"'

@@ -1,0 +1,71 @@
+name: COS Integration Test
+# Validates that:
+#   1. The deploy-cos composite action from observability-stack can successfully deploy COS
+#      in monolithic topology with seaweedfs as the storage backend.
+#   2. The o11y-tester charm can be deployed into the same Juju model and reaches active status.
+#
+# Everything runs as steps in a single job so all steps share the same runner, the same Juju
+# controller, and the same kubeconfig that the composite action sets up.
+
+on:
+  pull_request:
+    branches:
+      - main
+      - track/0
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner label (use a self-hosted label for a fully isolated environment)"
+        required: false
+        default: self-hosted-linux-amd64-noble-large
+
+jobs:
+  cos-integration:
+    name: Deploy COS and test o11y-tester
+    runs-on: ${{ inputs.runner || 'self-hosted-linux-amd64-noble-large' }}
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout o11y-tester-operator
+        uses: actions/checkout@v4
+
+      # ── Deploy COS ────────────────────────────────────────────────────────
+      # The composite action handles all infrastructure setup (microk8s, Juju, Terraform)
+      # for both github-hosted and self-hosted runners, then deploys COS via Terraform
+      # and waits for all applications to reach active status.
+      - name: Deploy COS
+        id: deploy-cos
+        uses: canonical/observability-stack/.github/actions/deploy-cos@feat/reusable-deploy-cos
+        with:
+          scale: monolithic
+          storage: seaweedfs
+
+      # ── Build the tester charm ─────────────────────────────────────────────
+      # On github-hosted runners, LXD and the charm tooling are not pre-installed.
+      # On self-hosted runners these are expected to be present already.
+      - name: Install charm tooling
+        run: |
+          sudo snap install astral-uv --classic
+          sudo snap install charmcraft --classic
+
+      - name: Build tester charm
+        run: charmcraft pack --verbosity brief
+
+      # ── Deploy o11y-tester alongside COS ──────────────────────────────────
+      # At this point COS is already running in the model provided by the action.
+      # We deploy the tester charm into that same model and assert it becomes active,
+      # confirming the two deployments can coexist.
+      - name: Deploy o11y-tester
+        run: |
+          CHARM_FILE=$(find . -maxdepth 1 -name "o11y-tester_*.charm" | head -1)
+          AGENT_IMAGE=$(python3 -c "import yaml; d=yaml.safe_load(open('charmcraft.yaml')); print(d['resources']['agent-image']['upstream-source'])")
+          juju deploy "${CHARM_FILE}" o11y-tester \
+            --model "${{ steps.deploy-cos.outputs.cos-model }}" \
+            --resource "agent-image=${AGENT_IMAGE}"
+
+      - name: Wait for o11y-tester to become active
+        run: |
+          juju wait-for application o11y-tester \
+            --model "${{ steps.deploy-cos.outputs.cos-model }}" \
+            --timeout 15m \
+            --query 'status == "active"'

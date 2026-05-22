@@ -43,12 +43,7 @@ jobs:
       # ── Build the tester charm ─────────────────────────────────────────────
       # On github-hosted runners, LXD and the charm tooling are not pre-installed.
       # On self-hosted runners these are expected to be present already.
-      - name: Set up LXD
-        if: ${{ runner.environment == 'github-hosted' }}
-        uses: canonical/setup-lxd@main
-
       - name: Install charm tooling
-        if: ${{ runner.environment == 'github-hosted' }}
         run: |
           sudo snap install astral-uv --classic
           sudo snap install charmcraft --classic

@@ -6,6 +6,11 @@ on:
       - main
       - track/3.0
 
+permissions:
+  contents: write
+  actions: read
+  security-events: write
+
 jobs:
   release:
     uses: canonical/observability/.github/workflows/charm-release.yaml@feat/self-hosted-runners

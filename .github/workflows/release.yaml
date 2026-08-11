@@ -8,5 +8,7 @@ on:
 
 jobs:
   release:
-    uses: canonical/observability/.github/workflows/charm-release.yaml@feat/tf-tagging
+    uses: canonical/observability/.github/workflows/charm-release.yaml@feat/self-hosted-runners
     secrets: inherit
+    with:
+      pack-using-self-hosted-runners: true

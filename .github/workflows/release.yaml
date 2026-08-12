@@ -17,4 +17,4 @@ jobs:
     secrets: inherit
     with:
       pack-using-self-hosted-runners: true
-      charmcraft-channel: latest/edge
+      charmcraft-channel: latest/stable

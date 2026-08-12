@@ -11,7 +11,7 @@ charm contents needs to be unique (i.e. different from all previous
 revisions) in order to create a new revision on Charmhub.
 
 You can increase the following number to guarantee unique contents.
-Number: 8
+Number: 9
 """
 
 import logging
@@ -85,15 +85,13 @@ class CharmTestCharm(ops.CharmBase):
     def _pebble_layer(self) -> ops.pebble.LayerDict:
         """Return a dictionary representing a Pebble layer."""
         return {
-            "summary": "grafana-agent layer",
-            "description": "pebble config layer for grafana-agent",
+            "summary": "otelcol layer",
+            "description": "pebble config layer for the OpenTelemetry Collector",
             "services": {
                 "agent": {
                     "override": "replace",
-                    "summary": "agent",
-                    "command": "/usr/bin/grafana-agent "
-                    "--config.file=/etc/agent/agent.yaml "
-                    "--metrics.wal-directory=/etc/agent/data",
+                    "summary": "otelcol",
+                    "command": "/otelcol-contrib --config=/etc/otelcol-contrib/config.yaml",
                     "startup": "enabled",
                 }
             },

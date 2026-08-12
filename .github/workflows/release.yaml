@@ -16,5 +16,4 @@ jobs:
     uses: canonical/observability/.github/workflows/charm-release.yaml@feat/self-hosted-runners
     secrets: inherit
     with:
-      pack-using-self-hosted-runners: true
       charmcraft-channel: latest/stable

@@ -27,7 +27,7 @@ resources:
   agent-image:
     type: oci-image
     description: OCI image for the OpenTelemetry Collector
-    upstream-source: otel/opentelemetry-collector-contrib@sha256:c5918f78992ee73b0d6f0e599423ac5ec52dd5d9726733114d6eca53d5a32ed5  # renovate: oci-image tag: latest
+    upstream-source: otel/opentelemetry-collector-contrib@sha256:fd328de2552466ad78385e1b1289c3f2402b1c45f265b252aab1955b42845ac1  # renovate: oci-image tag: latest
 
 config:
   options:

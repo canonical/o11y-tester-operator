@@ -6,8 +6,13 @@ on:
       - main
       - track/0
 
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
 jobs:
   pull-request:
     name: PR
-    uses: canonical/observability/.github/workflows/charm-pull-request.yaml@main
+    uses: canonical/observability/.github/workflows/charm-pull-request.yaml@feat/juju-lens-recording
     secrets: inherit
